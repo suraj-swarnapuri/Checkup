@@ -7,9 +7,11 @@ import json
 import chatbot
 from flask import Flask, request, redirect
 from flask import g # application context
+from flask_cors import CORS
 from twilio.twiml.messaging_response import MessagingResponse
 app = Flask(__name__)
 
+CORS(app)
 
 def get_db():
     if 'db' not in g:
