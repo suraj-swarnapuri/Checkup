@@ -2,6 +2,9 @@ import os
 from flask import Flask
 from flask import g # application context
 import database
+import random
+import datetime
+
 app = Flask(__name__)
 
 
@@ -15,28 +18,31 @@ def get_logger():
         g.logger = app.logger
     return g.logger
 
-@app.route("/")
-def hello_world():
-    db = get_db()
-    get_logger().info(db.get_patient_name("281-111-2222"))
-    return "<p>Hello, World!</p>"
 
-# Body Temperature
-@app.route("/health/<patient_number>/temp")
-def temperature(patient_number):
-    return f'95F'
-# Pulse
-@app.route("/health/<patient_number>/pulse")
-def pulse(patient_number):
-    return f'75bpm'
-# Rate of breathing
-@app.route("/health/<patient_number>/respiration")
-def respiration(patient_number):
-   return f'14 {patient_number}'
-# Blood Pressure
-@app.route("/health/<patient_number>/bp")
-def blood_pressure(patient_number):
-   return f'120 mmHg systolic and 80 mmHg diastolic'
+
+def mock_patient_health():
+    temp = random.randint(90, 110)
+    pulse = random.randint(60, 160)
+    respiration = random.randint(10, 30)
+    bp_systolic = random.randint(100, 200)
+    bp_diastolic = random.randint(60, 120)
+    return {
+        'temp' : '{0}F'.format(temp),
+        'pulse' : '{0}bpm'.format(pulse),
+        'respiration' : '{0}breath/min'.format(respiration),
+        'bp' : '{0} mmHg systolic / {1} mmHg diastolic'.format(bp_systolic, bp_diastolic)
+    }
+@app.route("/patient/<patient_number>/health")
+def get_info(patient_number):
+    db = get_db()
+    health_info =  mock_patient_health()
+    health_info["patient_number"] = patient_number
+    health_info["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    patient_info = health_info | db.get_patient_info(patient_number)
+    patient_info["activity_log"] = db.get_activity_log(patient_number)
+    return patient_info
+
+
 
 
 if __name__ == "__main__":
