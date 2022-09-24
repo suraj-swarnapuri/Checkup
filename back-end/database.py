@@ -37,7 +37,6 @@ class Database:
             return
 
         self._con = sqlite3.connect(database_file_name)
-       
 
         # create database
         create_tables(self._con.cursor())
