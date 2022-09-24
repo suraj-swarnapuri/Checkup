@@ -1,6 +1,8 @@
-import os
 from flask import Flask
 from flask import g # application context
+from twilio.twiml.messaging_response import MessagingResponse
+
+import os
 import database
 app = Flask(__name__)
 
