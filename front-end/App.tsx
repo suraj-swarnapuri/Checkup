@@ -1,14 +1,31 @@
 import React from 'react';
-import { Button, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, Dimensions } from 'react-native';
 import PatientDetailScreen from './screens/PatientDetailScreen';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import PatientListScreen from './screens/PatientListScreen';
 
 function Link(props: any) {
   return <Text {...props} accessibilityRole="link" style={StyleSheet.compose(styles.link, props.style)} />;
 }
+const Stack = createNativeStackNavigator();
 
 function App() {
   return (
-    <PatientDetailScreen />
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="PatientList"
+          component={PatientListScreen}
+          options={{ title: 'Patients' }}
+        />
+        <Stack.Screen
+          name='PatientDetail'
+          component={PatientDetailScreen}
+          options={{ title: "Patient Detail" }} />
+
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 let ScreenHeight = Dimensions.get('window').height;

@@ -2,10 +2,10 @@
 import React from "react"
 import { View, Text, SafeAreaView, StyleSheet } from "react-native";
 
-function PatientDetailScreen(props) {
+function PatientDetailScreen(props: any) {
     return (
         <SafeAreaView style={styles.test}>
-            <Text>HELLO</Text>
+            <Text>Patient Detail Screen</Text>
         </SafeAreaView>
     );
 }
