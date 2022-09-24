@@ -2,13 +2,19 @@ import sqlite3
 from os.path import exists
 
 database_file_name = "checkup.db"
-
+ROLES = {
+    'ADMIN': 'admin',
+    'PATIENT': 'patient',
+    'DOCTOR': 'doctor',
+    'NURSE': 'nurse'
+}
 
 def create_tables(curr):
-        curr.execute("CREATE TABLE patient_info(pid, phone_number, instructions, check_rate,name, rid)")
-        curr.execute("CREATE TABLE patient_health(pid, temp, pulse, respiration, bp, timestamp)")
-        curr.execute("CREATE TABLE activity_log(pid, nurse_id, timestamp, log)")
-        curr.execute("CREATE TABLE chat_log(pid, sender_name, role, timestamp, message_body)")
+    curr.execute("CREATE TABLE users(uid, phone_number, name, role)")
+    curr.execute("CREATE TABLE patient_info(pid, phone_number, instructions, check_rate,name, rid)")
+    curr.execute("CREATE TABLE patient_health(pid, temp, pulse, respiration, bp, timestamp)")
+    curr.execute("CREATE TABLE activity_log(pid, nurse_id, timestamp, log)")
+    curr.execute("CREATE TABLE chat_log(pid, sender_name, role, timestamp, message_body)")
 
 def insert_dummy_data(con):
     # patient_info
@@ -28,7 +34,13 @@ def insert_dummy_data(con):
 def clean(input):
     input.replace('\'', '\\\'')
     input.replace('\"', '\\\"')
+    input.replace('\.', '')
+    input.replace(';', '')
     return input
+
+def clean_phone_number(phone_number):
+    input.replace('-', '')
+    return f"+1{phone_number}"
 
 
 class Database:
@@ -103,3 +115,9 @@ class Database:
     def add_message(self, patient_id, sender_name, role, timestamp, message):
         self._con.cursor().execute(f"INSERT INTO chat_log VALUES({patient_id}, \"{clean(sender_name)}\", \"{role}\", \"{timestamp}\", \"{clean(message)}\")")
         self._con.commit()
+
+    def add_user(self, uid, phone_number, name, role):
+        self._con.cursor().execute(f"INSERT INTO users VALUES({uid}, \"{clean_phone_number(phone_number)}\", \"{clean(name)}\", \"{role}\")")
+
+    def get_patients(self):
+        req = self._con.cursor().execute(f"SELECT * FROM users WHERE role=\"{ROLES.PATIENT}\"")

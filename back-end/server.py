@@ -59,7 +59,7 @@ def mock_patient_health():
 
 
 ##### Routes
-@app.route("/patient/<patient_id>/health")
+@app.route("/patients/<patient_id>/health")
 def get_info(patient_id):
     db = get_db()
     health_info =  mock_patient_health()
@@ -69,18 +69,20 @@ def get_info(patient_id):
     patient_info["activity_log"] = db.get_activity_log(patient_id)
     return patient_info
 
-@app.get("/patient/<patient_id>/messages")
+@app.get("/patients/<patient_id>/messages")
 def get_messages(patient_id):
     db = get_db()
     return list(db.get_messages(patient_id))
 
-@app.post("/patient/<patient_id>/messages")
+@app.post("/patients/<patient_id>/messages")
 def post_message(patient_id):
     db = get_db()
     json = request.get_json()
     g.logger.info(str(json))
     db.add_message(patient_id, json['sender_name'], json['role'], get_timestamp(), json['message'])
     return Ok()
+
+@app.get("/patients")
 
 
 ##### Twilio
