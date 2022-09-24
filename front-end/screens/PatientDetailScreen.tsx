@@ -3,6 +3,8 @@ import { Stack, ListItem, Avatar } from "@react-native-material/core";
 import React from "react"
 import { Text, SafeAreaView, View, StyleSheet } from "react-native";
 import { Icon } from 'react-native-elements'
+import { mdiLungs } from '@mdi/js';
+
 function PatientDetailScreen(props: any) {
     return (
         <SafeAreaView>
@@ -21,8 +23,7 @@ function PatientDetailScreen(props: any) {
                 </View>
                     <View style={styles.row}>
                         <View style={styles.col}>
-
-                            <Icon style={styles.icon} name={"pizza-outline"} size={60} type="ionicon" tvParallaxProperties={undefined} />
+                            <Icon style={styles.icon} name={"lungs"} size={60} type="material-community" tvParallaxProperties={undefined} />
                             <Text style={styles.subtitle}> 5 B/m</Text>
                         </View>
                         <View style={styles.col}>
@@ -41,7 +42,7 @@ function PatientDetailScreen(props: any) {
                     <Text style={styles.title}>Activity Log</Text>
                     <ListItem
                         trailing={
-                            <Text style={{ fontSize: 14 }}>11:59PM</Text>
+                            <Text style={{ fontSize: 14, paddingRight: 25 }}>11:59PM</Text>
                         }
                         title="Suraj S."
                         secondaryText="Administered 2mg of dopamine"
@@ -49,7 +50,7 @@ function PatientDetailScreen(props: any) {
                     <ListItem
 
                         trailing={
-                            <Text style={{ fontSize: 14 }}>6:30PM</Text>
+                            <Text style={{ fontSize: 14, paddingRight: 25 }}>6:30PM</Text>
                         }
                         title="Suraj S."
                         secondaryText="Administered 20mg of fentanyl"

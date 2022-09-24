@@ -1,27 +1,25 @@
-
 import React from "react"
-import { View, StyleSheet } from "react-native";
-import { ListItem } from "@react-native-material/core";
-import { Ionicons } from '@expo/vector-icons';
-import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import { View, StyleSheet, Text } from "react-native";
+import { Button, HStack } from "@react-native-material/core";
+import { Icon } from 'react-native-elements'
 
 const initialState = {
     patients:
     [
         {
-            title: "Sam1",
-            secondaryText: "Patient Info1"
+            title: "Sam",
+            secondaryText: "Patient Info"
         },
         {
-            title: "Hunter1",
-            secondaryText: "Patient Info1"
+            title: "Hunter",
+            secondaryText: "Patient Info"
         },
         {
-            title: "Sara1",
-            secondaryText: "Patient Info1"
+            title: "Sara",
+            secondaryText: "Patient Info"
         },
         {
-            title: "matthew",
+            title: "Matthew",
             secondaryText: "dying"
         }
     ]
@@ -29,31 +27,47 @@ const initialState = {
 
 const PatientListScreen = ({ navigation }) => {
     const patientList = initialState.patients.map((element) =>
-        <ListItem
-            leadingMode="icon"
-            leading={
-                // <Avatar image={{ uri: "https://mui.com/static/images/avatar/1.jpg" }} />
-                <Ionicons name="person" size={24} />
-            }
-            trailing={props => <Icon name="chevron-right" {...props} />}
-            onPress={() =>
+        <View style={styles.listItem}>
+            <HStack m={4} spacing={6}>
+                <Icon style={styles.icon} name={"person-outline"} size={35} type="ionicon" tvParallaxProperties={undefined} />
+                <Text style={styles.title}>{element.title}</Text>
+            </HStack>
+            <Text>{element.secondaryText}</Text>
+            <Button style={styles.button} variant="outlined" color="#000000" title="Status" onPress={() =>
                 navigation.navigate('PatientDetail', { name: 'test' })
-            }
-            title={element.title}
-            secondaryText={element.secondaryText}
-        />
+            }/>
+        </View>
     );
 
     return (
-        <View style={styles.test}>
+        <View>
             {patientList}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    test: {
-        backgroundColor: "#fff",
+    listItem: {
+        margin: 10,
+        marginBottom: 0,
+        padding: 10,
+        backgroundColor: "#B0E2FF",
+        borderRadius: 10,
+    },
+    title: {
+        marginBottom: 10,
+        fontSize: 25,
+        fontWeight: "bold",
+        textAlign: "left",
+    },
+    button: {
+        alignSelf: "flex-end",
+        width: 90,
+        backgroundColor: "#FFFFFF",
+    },
+    icon: {
+        alignItems: "center",
+        marginBottom: 10,
     }
 })
 
