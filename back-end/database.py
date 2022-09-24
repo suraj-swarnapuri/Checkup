@@ -25,6 +25,12 @@ def insert_dummy_data(con):
 
     con.commit()
 
+def clean(input):
+    input.replace('\'', '\\\'')
+    input.replace('\"', '\\\"')
+    return input
+
+
 class Database:
     def __init__(self, logger):
         self._logger = logger
@@ -92,7 +98,8 @@ class Database:
                 'timestamp': i[3],
                 'message': i[4]
             })
+        return messages
 
-    def add_message(self, patient_id, role, timestamp, message):
-        self._con.cursor().execute(f"INSERT INTO chat_log VALUES ({patient_id}, {role}, {timestamp}, {message})")
+    def add_message(self, patient_id, sender_name, role, timestamp, message):
+        self._con.cursor().execute(f"INSERT INTO chat_log VALUES({patient_id}, \"{clean(sender_name)}\", \"{role}\", \"{timestamp}\", \"{clean(message)}\")")
         self._con.commit()

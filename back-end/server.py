@@ -2,6 +2,7 @@ import os
 import database
 import random
 import datetime
+import json
 
 import chatbot
 from flask import Flask, request, redirect
@@ -34,6 +35,11 @@ def get_chatbot():
 def get_timestamp():
     return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+def Ok(obj = None):
+    if obj == None:
+        obj = {'success':True}
+    return json.dumps(obj), 200, {'ContentType':'application/json'} 
+
 
 ##### Mocks
 def mock_patient_health():
@@ -64,13 +70,15 @@ def get_info(patient_id):
 @app.get("/patient/<patient_id>/messages")
 def get_messages(patient_id):
     db = get_db()
-    return db.get_messages(patient_id)
+    return list(db.get_messages(patient_id))
 
 @app.post("/patient/<patient_id>/messages")
 def post_message(patient_id):
     db = get_db()
     json = request.get_json()
-    db.add_message(patient_id, json['sender_id'], json['role'], get_timestamp(), json['message'])
+    g.logger.info(str(json))
+    db.add_message(patient_id, json['sender_name'], json['role'], get_timestamp(), json['message'])
+    return Ok()
 
 
 ##### Twilio
@@ -87,7 +95,6 @@ def sms_reply():
     bot.sendMessage('+18178512523', 'hello.')
 
     return str(resp)
-
 
 
 if __name__ == "__main__":
