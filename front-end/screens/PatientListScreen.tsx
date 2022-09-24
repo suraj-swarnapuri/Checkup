@@ -1,45 +1,53 @@
 
 import React from "react"
-import { Text, Button, View, StyleSheet } from "react-native";
-import { ListItem, Avatar } from "@react-native-material/core";
+import { View, StyleSheet } from "react-native";
+import { ListItem } from "@react-native-material/core";
+import { Ionicons } from '@expo/vector-icons';
+import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+
+const initialState = {
+    patients:
+    [
+        {
+            title: "Sam1",
+            secondaryText: "Patient Info1"
+        },
+        {
+            title: "Hunter1",
+            secondaryText: "Patient Info1"
+        },
+        {
+            title: "Sara1",
+            secondaryText: "Patient Info1"
+        },
+        {
+            title: "matthew",
+            secondaryText: "dying"
+        }
+    ]
+}
 
 const PatientListScreen = ({ navigation }) => {
+    const patientList = initialState.patients.map((element) =>
+        <ListItem
+            leadingMode="icon"
+            leading={
+                // <Avatar image={{ uri: "https://mui.com/static/images/avatar/1.jpg" }} />
+                <Ionicons name="person" size={24} />
+            }
+            trailing={props => <Icon name="chevron-right" {...props} />}
+            onPress={() =>
+                navigation.navigate('PatientDetail', { name: 'test' })
+            }
+            title={element.title}
+            secondaryText={element.secondaryText}
+        />
+    );
+
     return (
-        <>
-            <ListItem
-            leadingMode="avatar"
-            leading={
-                <Avatar image={{ uri: "https://mui.com/static/images/avatar/1.jpg" }} />
-            }
-            title="Brunch this weekend?"
-            secondaryText="I'll be in your neighborhood doing errands this…"
-            />
-            <ListItem
-            leadingMode="avatar"
-            leading={
-                <Avatar image={{ uri: "https://mui.com/static/images/avatar/2.jpg" }} />
-            }
-            title="Summer BBQ"
-            secondaryText="Wish I could come, but I'm out of town this…"
-            />
-            <ListItem
-            leadingMode="avatar"
-            leading={
-                <Avatar image={{ uri: "https://mui.com/static/images/avatar/3.jpg" }} />
-            }
-            title="Oui Oui"
-            secondaryText="Do you have Paris recommendations? Have you ever…"
-            />
-            <View style={styles.test}>
-            <Text>Patient List Screen</Text>
-            <Button
-                title="Go to Detail"
-                onPress={() =>
-                    navigation.navigate('PatientDetail', { name: 'test' })
-                }
-            />
-            </View>
-        </>
+        <View style={styles.test}>
+            {patientList}
+        </View>
     );
 }
 
