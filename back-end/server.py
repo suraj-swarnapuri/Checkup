@@ -33,14 +33,14 @@ def mock_patient_health():
         'bp' : '{0} mmHg systolic / {1} mmHg diastolic'.format(bp_systolic, bp_diastolic)
     }
 
-@app.route("/patient/<patient_number>/health")
-def get_info(patient_number):
+@app.route("/patient/<patient_id>/health")
+def get_info(patient_id):
     db = get_db()
     health_info =  mock_patient_health()
-    health_info["patient_number"] = patient_number
+    health_info["patient_id"] = patient_id
     health_info["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    patient_info = health_info | db.get_patient_info(patient_number)
-    patient_info["activity_log"] = db.get_activity_log(patient_number)
+    patient_info = health_info | db.get_patient_info(patient_id)
+    patient_info["activity_log"] = db.get_activity_log(patient_id)
     return patient_info
 
 
