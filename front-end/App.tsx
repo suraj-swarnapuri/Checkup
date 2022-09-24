@@ -4,6 +4,8 @@ import PatientDetailScreen from './screens/PatientDetailScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import PatientListScreen from './screens/PatientListScreen';
+import ChatScreen from './screens/ChatScreen';
+import { Icon } from '@react-native-material/core';
 
 function Link(props: any) {
   return <Text {...props} accessibilityRole="link" style={StyleSheet.compose(styles.link, props.style)} />;
@@ -23,7 +25,10 @@ function App() {
           name='PatientDetail'
           component={PatientDetailScreen}
           options={{ title: "Patient Detail" }} />
-
+        <Stack.Screen
+          name='ChatPage'
+          component={ChatScreen}
+          options={{ title: "Chat" }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
