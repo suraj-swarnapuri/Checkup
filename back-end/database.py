@@ -1,15 +1,14 @@
 import sqlite3
 from os.path import exists
 
-database_file_name = "patient_info.db"
-
+database_file_name = "checkup.db"
 
 
 def create_tables(curr):
         curr.execute("CREATE TABLE patient_info(pid, phone_number, instructions, check_rate,name, rid)")
         curr.execute("CREATE TABLE patient_health(pid, temp, pulse, respiration, bp, timestamp)")
-        curr.execute("CREATE TABLE activity_log(pid, nurse_id, time,log)")
-        curr.execute("CREATE TABLE chat_log(pid, from_patient, time_stamp, message_body)")
+        curr.execute("CREATE TABLE activity_log(pid, nurse_id, timestamp, log)")
+        curr.execute("CREATE TABLE chat_log(pid, sender_name, role, timestamp, message_body)")
 
 def insert_dummy_data(con):
     # patient_info
@@ -82,3 +81,18 @@ class Database:
                 'log' : i[3]
             })
         return activity_log
+
+    def get_messages(self, patient_id):
+        req = self._con.cursor().execute(f"SELECT * FROM chat_log WHERE pid={patient_id} ORDER BY timestamp DESC")
+        messages = []
+        for i in req.fetchall():
+            messages.append({
+                'sender_name': i[1],
+                'role': i[2],
+                'timestamp': i[3],
+                'message': i[4]
+            })
+
+    def add_message(self, patient_id, role, timestamp, message):
+        self._con.cursor().execute(f"INSERT INTO chat_log VALUES ({patient_id}, {role}, {timestamp}, {message})")
+        self._con.commit()

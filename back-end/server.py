@@ -9,6 +9,7 @@ from flask import g # application context
 from twilio.twiml.messaging_response import MessagingResponse
 app = Flask(__name__)
 
+
 def get_db():
     if 'db' not in g:
         g.db = database.Database(get_logger())
@@ -20,6 +21,21 @@ def get_logger():
         g.logger = app.logger
     return g.logger
 
+def get_chatbot():
+    if 'chatbot' not in g:
+        g.chatbot = chatbot.Chatbot(
+            get_logger(),
+            os.environ['TWILIO_ACCOUNT_SID'],
+            os.environ['TWILIO_AUTH_TOKEN'],
+            os.environ['TWILIO_PHONE_NUMBER'])
+    return g.chatbot
+
+##### Helpers
+def get_timestamp():
+    return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+##### Mocks
 def mock_patient_health():
     temp = random.randint(90, 110)
     pulse = random.randint(60, 160)
@@ -33,27 +49,31 @@ def mock_patient_health():
         'bp' : '{0} mmHg systolic / {1} mmHg diastolic'.format(bp_systolic, bp_diastolic)
     }
 
+
+##### Routes
 @app.route("/patient/<patient_id>/health")
 def get_info(patient_id):
     db = get_db()
     health_info =  mock_patient_health()
     health_info["patient_id"] = patient_id
-    health_info["timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    health_info["timestamp"] = get_timestamp()
     patient_info = health_info | db.get_patient_info(patient_id)
     patient_info["activity_log"] = db.get_activity_log(patient_id)
     return patient_info
 
+@app.get("/patient/<patient_id>/messages")
+def get_messages(patient_id):
+    db = get_db()
+    return db.get_messages(patient_id)
 
-def get_chatbot():
-    if 'chatbot' not in g:
-        g.chatbot = chatbot.Chatbot(
-            get_logger(),
-            os.environ['TWILIO_ACCOUNT_SID'],
-            os.environ['TWILIO_AUTH_TOKEN'],
-            os.environ['TWILIO_PHONE_NUMBER'])
-    return g.chatbot
+@app.post("/patient/<patient_id>/messages")
+def post_message(patient_id):
+    db = get_db()
+    json = request.get_json()
+    db.add_message(patient_id, json['sender_id'], json['role'], get_timestamp(), json['message'])
 
-# Twilio webhook
+
+##### Twilio
 @app.route("/sms", methods=['GET', 'POST'])
 def sms_reply():
     """Respond to incoming calls with a simple text message."""
@@ -67,7 +87,6 @@ def sms_reply():
     bot.sendMessage('+18178512523', 'hello.')
 
     return str(resp)
-
 
 
 
