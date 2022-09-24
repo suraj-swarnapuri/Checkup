@@ -1,2 +1,5 @@
 #!/bin/bash
 echo "Starting dev server"
+cd ./back-end && pip install -r requirements.txt
+cd ../front-end && npm install
+cd ../
