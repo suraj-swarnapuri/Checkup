@@ -17,6 +17,15 @@ def get_logger():
         g.logger = app.logger
     return g.logger
 
+def get_chatbot():
+    if 'chatbot' not in g:
+        g.chatbot = chatbot.chatbot(
+            g.logger,
+            os.environ['TWILIO_ACCOUNT_SID'],
+            os.environ['TWILIO_AUTH_TOKEN'],
+            os.environ['TWILIO_PHONE_NUMBER'])
+    return g.chatbot
+
 @app.route("/")
 def hello_world():
     db = get_db()
@@ -32,8 +41,11 @@ def sms_reply():
 
     # Add a message
     resp.message("The Robots are coming! Head for the hills!")
-    return str(resp)
 
+    bot = get_chatbot()
+    bot.sendMessage('+18178512523', 'hello.')
+
+    return str(resp)
 
 # Body Temperature
 @app.route("/health/<patient_number>/temp")

@@ -4,17 +4,20 @@ from twilio.rest import Client
 from dotenv import load_dotenv
 load_dotenv()
 
-# Find your Account SID and Auth Token at twilio.com/console
-# and set the environment variables. See http://twil.io/secure
-account_sid = os.environ['TWILIO_ACCOUNT_SID']
-auth_token = os.environ['TWILIO_AUTH_TOKEN']
-client = Client(account_sid, auth_token)
+def format_number(phone_number):
+    if phone_number[0:2] != '+1':
+        return f'+1{phone_number}'
 
-message = client.messages \
-    .create(
-         body='This is the ship that made the Kessel Run in fourteen parsecs?',
-         from_='+15017122661',
-         to='+15558675310'
-     )
+class Chatbot:
+    def __init__(self, logger, account_sid, auth_token, sender_number):
+        self._logger = logger
+        self._logger.info('Init chatbot')
 
-print(message.sid)
+        self.sender_number = sender_number
+        self.client = Client(account_sid, auth_token)
+
+    def sendMessage(phone_number, message)
+        return client.messages.create(
+                body='This is the ship that made the Kessel Run in fourteen parsecs?',
+                from_=self.sender_number,
+                to=format_number(phon_number))
