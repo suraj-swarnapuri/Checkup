@@ -7,18 +7,19 @@ function PatientDetailScreen(props: any) {
     return (
         <SafeAreaView>
             <Stack>
-                <View style={styles.section}>                <View style={styles.row}>
-                    <View style={styles.col}>
-                        {/*  <PulseAnimation style={{ justifyContent: "center" }} color={'#aaa'} numPulses={1} diameter={100} speed={500} duration={2000} /> */}
-                        <Icon style={styles.icon} name={"heart-outline"} size={60} type="ionicon" tvParallaxProperties={undefined} />
+                <View style={styles.section}>
+                    <View style={styles.row}>
+                        <View style={styles.col}>
+                            {/*  <PulseAnimation style={{ justifyContent: "center" }} color={'#aaa'} numPulses={1} diameter={100} speed={500} duration={2000} /> */}
+                            <Icon style={styles.icon} name={"heart-outline"} size={60} type="ionicon" tvParallaxProperties={undefined} />
 
-                        <Text style={styles.subtitle}>96 BPM</Text>
+                            <Text style={styles.subtitle}>96 BPM</Text>
+                        </View>
+                        <View style={styles.col}>
+                            <Icon style={styles.icon} name={"water-outline"} size={60} type="ionicon" tvParallaxProperties={undefined} />
+                            <Text style={styles.subtitle}>130/90</Text>
+                        </View>
                     </View>
-                    <View style={styles.col}>
-                        <Icon style={styles.icon} name={"water-outline"} size={60} type="ionicon" tvParallaxProperties={undefined} />
-                        <Text style={styles.subtitle}>130/90</Text>
-                    </View>
-                </View>
                     <View style={styles.row}>
                         <View style={styles.col}>
 
