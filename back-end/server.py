@@ -1,9 +1,9 @@
 import os
-from flask import Flask
-from flask import g # application context
 import database
+from flask import Flask, request, redirect
+from flask import g # application context
+from twilio.twiml.messaging_response import MessagingResponse
 app = Flask(__name__)
-
 
 def get_db():
     if 'db' not in g:
@@ -20,6 +20,18 @@ def hello_world():
     db = get_db()
     get_logger().info(db.get_patient_name("281-111-2222"))
     return "<p>Hello, World!</p>"
+
+# Twilio webhook
+@app.route("/sms", methods=['GET', 'POST'])
+def sms_reply():
+    """Respond to incoming calls with a simple text message."""
+    # Start our TwiML response
+    resp = MessagingResponse()
+
+    # Add a message
+    resp.message("The Robots are coming! Head for the hills!")
+    return str(resp)
+
 
 # Body Temperature
 @app.route("/health/<patient_number>/temp")
@@ -41,4 +53,4 @@ def blood_pressure(patient_number):
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
-    app.run(debug=True, host='0.0.0.0', port=port)
+    app.run(debug=os.environ['DEBUG'], host='0.0.0.0', port=port)
