@@ -1,20 +1,41 @@
 
 import React from "react"
-import { View, Text, SafeAreaView, StyleSheet } from "react-native";
-
+import { Text, SafeAreaView, View, StyleSheet } from "react-native";
+import { Icon } from 'react-native-elements'
 function PatientDetailScreen(props: any) {
     return (
-        <SafeAreaView style={styles.test}>
-            <Text>Patient Detail Screen</Text>
-        </SafeAreaView>
+        <SafeAreaView>
+            <View style={styles.row}>
+                <View style={styles.col}>
+                    <Text>Pulse</Text>
+                </View>
+                <View style={styles.col}>
+                    <Text>BP</Text>
+                </View>
+            </View>
+            <View style={styles.row}>
+                <View style={styles.col}>
+                    <Text>Respiration</Text>
+                </View>
+                <View style={styles.col}>
+                    <Text>Temp</Text>
+                </View>
+            </View>
+        </SafeAreaView >
     );
 }
 
 const styles = StyleSheet.create({
-    test: {
-        backgroundColor: "#fff",
-        width: 100,
-        height: 200
+    row: {
+        flexDirection: "row",
+        backgroundColor: "lightgrey"
+    },
+    col: {
+        backgroundColor: "red",
+        flex: 1,
+        height: 200,
+        padding: 10,
+        margin: 10
     }
 })
 
