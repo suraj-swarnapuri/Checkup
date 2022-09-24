@@ -18,22 +18,22 @@ def get_logger():
 @app.route("/")
 def hello_world():
     db = get_db()
-    get_logger().info(db.get_number(1))
+    get_logger().info(db.get_patient_name("281-111-2222"))
     return "<p>Hello, World!</p>"
 
 # Body Temperature
-@app.route("/health/<patient_id>/temp")
-def temperature(patient_id):
+@app.route("/health/<patient_number>/temp")
+def temperature(patient_number):
     return f'95F'
 # Pulse
-@app.route("/health/<patient_id>/pulse")
-def pulse(patient_id):
+@app.route("/health/<patient_number>/pulse")
+def pulse(patient_number):
     return f'75bpm'
 # Rate of breathing
-@app.route("/health/<patient_id>/respiration")
-def respiration(patient_id):
-   return f'14 {patient_id}'
+@app.route("/health/<patient_number>/respiration")
+def respiration(patient_number):
+   return f'14 {patient_number}'
 # Blood Pressure
-@app.route("/health/<patient_id>/bp")
-def blood_pressure(patient_id):
+@app.route("/health/<patient_number>/bp")
+def blood_pressure(patient_number):
    return f'120 mmHg systolic and 80 mmHg diastolic'
