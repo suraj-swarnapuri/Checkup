@@ -8,7 +8,7 @@ database_file_name = "patient_info.db"
 def create_tables(curr):
         curr.execute("CREATE TABLE patient_info(pid, instructions, check_rate,name, rid)")
         curr.execute("CREATE TABLE patient_health(pid, temp, pulse, respiration, bp, timestamp)")
-        curr.execute("CREATE TABLE activity_log(pid, time, activity,log)")
+        curr.execute("CREATE TABLE activity_log(pid, nurse_id, time,log)")
         curr.execute("CREATE TABLE chat_log(pid, from_patient, time_stamp, message_body)")
 
 def insert_dummy_data(con):
@@ -20,6 +20,10 @@ def insert_dummy_data(con):
     con.cursor().execute("INSERT INTO patient_health VALUES('281-111-2222', '95F', '75bpm', '14', '120 mmHg systolic / 80 mmHg diastolic','2020-04-01 12:00:00')")
     con.cursor().execute("INSERT INTO patient_health VALUES('281-111-2223', '98F', '80bpm', '16', '130 mmHg systolic / 90 mmHg diastolic','2020-04-01 12:00:00')")
     
+    # activity_log
+    con.cursor().execute("INSERT INTO activity_log VALUES('281-111-2222', '1', '2020-04-01 12:00:00', 'took medicine')")
+    con.cursor().execute("INSERT INTO activity_log VALUES('281-111-2223', '1', '2020-04-01 12:00:00', 'changed bed sheets')")
+
     con.commit()
 
 class Database:
@@ -70,11 +74,11 @@ class Database:
 
     def get_activity_log(self, patient_number):
         req = self._con.cursor().execute("SELECT * FROM activity_log WHERE pid=?", (patient_number,))
-        activity_log = {}
+        activity_log = []
         for i in req.fetchall():
-            activity_log[i[1]] = {
+            activity_log.append({
+                'nurse_id' : i[1],
                 'activity' : i[2],
                 'log' : i[3]
-
-            }
+            })
         return activity_log
