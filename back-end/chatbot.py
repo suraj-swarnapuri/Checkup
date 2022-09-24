@@ -4,12 +4,6 @@ from twilio.rest import Client
 from dotenv import load_dotenv
 load_dotenv()
 
-def format_number(phone_number):
-    if phone_number[0:2] != '+1':
-        return f'+1{phone_number}'
-    else:
-        return phone_number
-
 class Chatbot:
     def __init__(self, logger, account_sid, auth_token, sender_number):
         self._logger = logger
@@ -22,4 +16,4 @@ class Chatbot:
         return self.client.messages.create(
                 body=message,
                 from_=self.sender_number,
-                to=format_number(phone_number))
+                to=phone_number)
