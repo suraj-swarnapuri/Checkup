@@ -1,32 +1,13 @@
 import React from "react"
+import { useSelector } from 'react-redux';
 import { View, StyleSheet, Text } from "react-native";
 import { Button, HStack } from "@react-native-material/core";
 import { Icon } from 'react-native-elements'
 
-const initialState = {
-    patients:
-    [
-        {
-            title: "Sam",
-            secondaryText: "Patient Info"
-        },
-        {
-            title: "Hunter",
-            secondaryText: "Patient Info"
-        },
-        {
-            title: "Sara",
-            secondaryText: "Patient Info"
-        },
-        {
-            title: "Matthew",
-            secondaryText: "dying"
-        }
-    ]
-}
-
 const PatientListScreen = ({ navigation }) => {
-    const patientList = initialState.patients.map((element) =>
+    const patients = useSelector((state) => state.checkupStates.patients);
+
+    const patientsDisplay = patients.map((element) =>
         <View style={styles.listItem}>
             <HStack m={4} spacing={6}>
                 <Icon style={styles.icon} name={"person-outline"} size={35} type="ionicon" tvParallaxProperties={undefined} />
@@ -41,7 +22,7 @@ const PatientListScreen = ({ navigation }) => {
 
     return (
         <View>
-            {patientList}
+            {patientsDisplay}
         </View>
     );
 }

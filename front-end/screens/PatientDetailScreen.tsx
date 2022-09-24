@@ -3,7 +3,6 @@ import { Stack, ListItem, Avatar } from "@react-native-material/core";
 import React from "react"
 import { Text, SafeAreaView, View, StyleSheet } from "react-native";
 import { Icon } from 'react-native-elements'
-import { mdiLungs } from '@mdi/js';
 
 function PatientDetailScreen(props: any) {
     return (

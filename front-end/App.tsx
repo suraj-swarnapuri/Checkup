@@ -1,4 +1,6 @@
 import React from 'react';
+import store from './store/store';
+import { Provider } from 'react-redux';
 import { StyleSheet, Text, Dimensions } from 'react-native';
 import PatientDetailScreen from './screens/PatientDetailScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -12,22 +14,24 @@ const Stack = createNativeStackNavigator();
 
 function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="PatientList"
-          component={PatientListScreen}
-          options={{ title: 'Patients' }}
-        />
-        <Stack.Screen
-          name='PatientDetail'
-          component={PatientDetailScreen}
-          options={{ title: "Patient Detail" }} />
-
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="PatientList"
+            component={PatientListScreen}
+            options={{ title: 'Patients' }}
+          />
+          <Stack.Screen
+            name='PatientDetail'
+            component={PatientDetailScreen}
+            options={{ title: "Patient Detail" }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
+
 let ScreenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   container: {
@@ -41,7 +45,6 @@ const styles = StyleSheet.create({
     padding: 20
   },
   title: {
-    //fontWeight: 'bold',
     fontSize: '1.5rem',
     marginVertical: '1em',
     textAlign: 'center'
