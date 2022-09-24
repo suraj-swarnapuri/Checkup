@@ -1,4 +1,4 @@
-from tkinter import N
+import os
 from flask import Flask
 from flask import g # application context
 import database
@@ -37,3 +37,8 @@ def respiration(patient_number):
 @app.route("/health/<patient_number>/bp")
 def blood_pressure(patient_number):
    return f'120 mmHg systolic and 80 mmHg diastolic'
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)

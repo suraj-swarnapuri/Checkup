@@ -1,9 +1,8 @@
 ## Checkup Backend
 
-### Local Dev Environment
+### Run Application
 
 - `cd back-end/`
-- `docker build -t devcontainer .`
-- `docker run -d -p 81:81 -it devcontainer bash`
-- Open VsCode
-- Bottom right connect to running container
+- `docker build -t backend .`
+- `docker run -d -p 5000:5000 backend `
+- open localhost:500/
