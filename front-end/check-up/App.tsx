@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, StyleSheet, Text, View, Dimensions } from 'react-native';
 
-function Link(props) {
+function Link(props: any) {
   return <Text {...props} accessibilityRole="link" style={StyleSheet.compose(styles.link, props.style)} />;
 }
 
@@ -9,12 +9,12 @@ function App() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Welcome to React Native for Web</Text>
+        <Text>Welcome to React Native for Web</Text>
       </View>
-      <Text style={styles.text}>
+      <Text >
         This starter project enables you to build web application using React Native module. .
       </Text>
-      <Text style={styles.text}>
+      <Text >
         Built with <Link href="https://github.com/facebook/create-react-app">Create React App</Link> and{' '}
         <Link href="https://github.com/necolas/react-native-web">React Native for Web</Link>
       </Text>
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     padding: 20
   },
   title: {
-    fontWeight: 'bold',
+    //fontWeight: 'bold',
     fontSize: '1.5rem',
     marginVertical: '1em',
     textAlign: 'center'
