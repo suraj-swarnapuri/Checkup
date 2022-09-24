@@ -2,7 +2,7 @@
 
 ### Local Dev Environment
 
-- `cd backend/`
+- `cd back-end/`
 - `docker build -t devcontainer .`
 - `docker run -d -p 80:80`
 - Open VsCode
