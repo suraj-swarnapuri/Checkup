@@ -1,5 +1,6 @@
 import os
 import database
+import chatbot
 from flask import Flask, request, redirect
 from flask import g # application context
 from twilio.twiml.messaging_response import MessagingResponse
@@ -9,6 +10,7 @@ def get_db():
     if 'db' not in g:
         g.db = database.Database(get_logger())
     return g.db
+
 def get_logger():
     if 'logger' not in g:
         app.logger.setLevel("INFO")
