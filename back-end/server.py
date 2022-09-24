@@ -19,7 +19,7 @@ def get_logger():
 
 def get_chatbot():
     if 'chatbot' not in g:
-        g.chatbot = chatbot.chatbot(
+        g.chatbot = chatbot.Chatbot(
             g.logger,
             os.environ['TWILIO_ACCOUNT_SID'],
             os.environ['TWILIO_AUTH_TOKEN'],
