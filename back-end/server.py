@@ -42,6 +42,8 @@ def Ok(obj = None):
         obj = {'success':True} 
     return json.dumps(obj), 200, {'ContentType':'application/json'} 
 
+def format_snapshot(info):
+    return f"temp:{info['temp']} pulse:{info['pulse']} respiration:{info['respiration']} bp:{info['bp_systolic']}/{info['bp_diastolic']}"
 
 ##### Mocks
 def mock_patient_health():
@@ -79,12 +81,21 @@ def get_messages(patient_id):
 def post_message(patient_id):
     db = get_db()
     json = request.get_json()
-    post_message
     db.add_message(patient_id, json['sender_name'], json['role'], get_timestamp(), json['message'])
 
     user = db.get_user(patient_id)
     chatbot = get_chatbot()
     chatbot.sendMessage(user['phone_number'], json['message'])
+    return Ok()
+
+@app.put("/patients/<patient_id>/snapshot")
+def snapshot_vitals(patient_id):
+    info = get_info(patient_id)
+    logger = get_logger()
+    logger.info(str(info))
+    json = request.get_json()
+    db = get_db()
+    db.add_activity_log(patient_id, json['name'], get_timestamp(), format_snapshot(info))
     return Ok()
 
 @app.get("/patients")
