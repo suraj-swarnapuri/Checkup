@@ -13,10 +13,10 @@ function PatientDetailScreen({ route }) {
         <ListItem
 
             trailing={
-                <Text style={{ fontSize: 14, paddingRight: 25 }}>{element.activity}</Text>
+                <Text style={{ fontSize: 14, paddingRight: 25 }}>{element.timestamp.split(" ")[1].slice(0, 5)}</Text>
             }
-            title={element.nurse_id}
-            secondaryText={element.log}
+            title={element.name}
+            secondaryText={element.message}
         />
     );
 

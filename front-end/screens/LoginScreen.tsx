@@ -7,6 +7,7 @@ import { Image } from "react-native";
 export default function LoginScreen({ navigation }) {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
+    const [text, setText] = useState('');
     const [items, setItems] = useState([
         { label: 'Nurse', value: "nurse" },
         { label: 'Doctor', value: "doctor" },
@@ -18,7 +19,7 @@ export default function LoginScreen({ navigation }) {
             'https://hackdfw-checkup.herokuapp.com/patients'
         ).then((response) => response.json()).then((responseJson) => {
             console.log(responseJson);
-            navigation.navigate('PatientList', { patients: responseJson })
+            navigation.navigate('PatientList', { patients: responseJson, name: text })
         });
     }
 
@@ -26,7 +27,7 @@ export default function LoginScreen({ navigation }) {
 
         <View style={{ flex: 1, margin: 10, alignItems: "center", backgroundColor: "#ffffff" }}>
             <Image style={{ width: 300, height: 300, justifyContent: "center" }} source={require('../assets/checkup.jpeg')} />
-            <TextInput label='Username' variant="outlined" style={{ borderRadius: 30, width: 390 }} />
+            <TextInput label='Username' onChangeText={newText => setText(newText)} defaultValue={text} variant="outlined" style={{ borderRadius: 30, width: 390 }} />
             <DropDownPicker
                 open={open}
                 value={value}
