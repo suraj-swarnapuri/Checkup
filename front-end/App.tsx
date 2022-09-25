@@ -5,11 +5,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import PatientListScreen from './screens/PatientListScreen';
 import ChatScreen from './screens/ChatScreen';
-import { Icon } from '@react-native-material/core';
 
 function Link(props: any) {
   return <Text {...props} accessibilityRole="link" style={StyleSheet.compose(styles.link, props.style)} />;
 }
+
 const Stack = createNativeStackNavigator();
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
           component={PatientDetailScreen}
           options={{ title: "Patient Detail" }} />
         <Stack.Screen
-          name='ChatPage'
+          name='Chat'
           component={ChatScreen}
           options={{ title: "Chat" }} />
       </Stack.Navigator>

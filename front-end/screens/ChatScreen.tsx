@@ -1,44 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 
-function ChatScreen() {
+function ChatScreen({ route }) {
+    const { messagesObj } = route.params;
+    console.log(route.params)
     const [messages, setMessages] = useState<any[]>([]);
     var dt = new Date();
     dt.setHours(dt.getHours() - 2);
     useEffect(() => {
-        setMessages([
-            {
-                _id: 3,
-                text: 'Hello developer',
-                createdAt: new Date(),
-                user: {
-                    _id: 2,
-                    name: 'React Native',
-                    avatar: 'https://placeimg.com/140/140/any',
-                },
-            },
-            {
-                _id: 2,
-                text: 'How are you doing??',
-                createdAt: dt,
-                user: {
-                    _id: 2,
-                    name: 'Test',
-                    avatar: 'https://placeimg.com/140/140/any',
-                },
-            },
-            {
-                _id: 1,
-                text: 'I love you',
-                createdAt: new Date(),
-                user: {
-                    _id: 2,
-                    name: 'React Native',
-                    avatar: 'https://placeimg.com/140/140/any',
-                },
-            },
-        ])
+        setMessages(messagesObj)
     }, [])
 
     const onSend = useCallback((messages: any[] = []) => {
