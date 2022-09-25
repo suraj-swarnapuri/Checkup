@@ -1,27 +1,49 @@
 import React from 'react';
-import { Button, StyleSheet, Text, View, Dimensions } from 'react-native';
+import store from './store/store';
+import { Provider } from 'react-redux';
+import { StyleSheet, Text, Dimensions } from 'react-native';
+import PatientDetailScreen from './screens/PatientDetailScreen';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import PatientListScreen from './screens/PatientListScreen';
+import ChatScreen from './screens/ChatScreen';
+import LoginScreen from './screens/LoginScreen';
 
 function Link(props: any) {
   return <Text {...props} accessibilityRole="link" style={StyleSheet.compose(styles.link, props.style)} />;
 }
 
+const Stack = createNativeStackNavigator();
+
 function App() {
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text>Welcome to React Native for Web</Text>
-      </View>
-      <Text >
-        This starter project enables you to build web application using React Native module. .
-      </Text>
-      <Text >
-        Built with <Link href="https://github.com/facebook/create-react-app">Create React App</Link> and{' '}
-        <Link href="https://github.com/necolas/react-native-web">React Native for Web</Link>
-      </Text>
-      <Button onPress={() => { }} title="Example button" />
-    </View>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ title: 'Login' }}
+          />
+          <Stack.Screen
+            name="PatientList"
+            component={PatientListScreen}
+            options={{ title: 'Patients' }}
+          />
+          <Stack.Screen
+            name='PatientDetail'
+            component={PatientDetailScreen}
+            options={{ title: "Patient Detail" }} />
+          <Stack.Screen
+            name='Chat'
+            component={ChatScreen}
+            options={{ title: "Chat" }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
+
 let ScreenHeight = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   container: {
@@ -35,7 +57,6 @@ const styles = StyleSheet.create({
     padding: 20
   },
   title: {
-    //fontWeight: 'bold',
     fontSize: '1.5rem',
     marginVertical: '1em',
     textAlign: 'center'
