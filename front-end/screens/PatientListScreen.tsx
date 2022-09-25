@@ -4,8 +4,9 @@ import { View, StyleSheet, Text } from "react-native";
 import { Button, HStack } from "@react-native-material/core";
 import { Icon } from 'react-native-elements'
 
-const patients = useSelector((state) => state.checkupStates.patients);
+
 const PatientListScreen = ({ navigation }) => {
+    const patients = useSelector((state) => state.checkupStates.patients);
     function getPatientData() {
         let response = fetch(
             'https://hackdfw-checkup.herokuapp.com/patient/1/health'
@@ -34,7 +35,7 @@ const PatientListScreen = ({ navigation }) => {
             navigation.navigate('Chat', { name: 'test', messagesObj: messagesObj })
         });
     }
-    const patientDisplay = patients.map((element) =>
+    const patientsDisplay = patients.map((element) =>
         <View style={styles.listItem}>
             <HStack m={4} spacing={6}>
                 <Icon style={styles.icon} name={"person-outline"} size={35} type="ionicon" tvParallaxProperties={undefined} />
