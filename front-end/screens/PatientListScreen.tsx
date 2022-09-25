@@ -7,7 +7,7 @@ import { Icon } from 'react-native-elements'
 
 const PatientListScreen = ({ navigation, route }) => {
     //const patients = useSelector((state) => state.checkupStates.patients);
-    const { patients } = route.params;
+    const { patients, name } = route.params;
     function getPatientData(pid) {
         let response = fetch(
             `https://hackdfw-checkup.herokuapp.com/patients/${pid}/health`
@@ -33,7 +33,7 @@ const PatientListScreen = ({ navigation, route }) => {
                     },
                 })
             });
-            navigation.navigate('Chat', { name: 'test', messagesObj: messagesObj })
+            navigation.navigate('Chat', { name: name, messagesObj: messagesObj })
         });
     }
     console.log(patients)
