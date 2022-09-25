@@ -13,7 +13,7 @@ function sendMessage(message) {
         },
         body: JSON.stringify({
             "sender_name": "surag",
-            "role": "doctor",
+            "role": "nurse",
             "message": message
         })
     });

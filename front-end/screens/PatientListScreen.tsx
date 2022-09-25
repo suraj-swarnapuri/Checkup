@@ -12,7 +12,6 @@ const PatientListScreen = ({ navigation, route }) => {
         let response = fetch(
             `https://hackdfw-checkup.herokuapp.com/patients/${pid}/health`
         ).then((response) => response.json()).then((responseJson) => {
-            console.log(responseJson);
             navigation.navigate('PatientDetail', { name: 'test', patientData: responseJson })
         });
     }
@@ -21,14 +20,14 @@ const PatientListScreen = ({ navigation, route }) => {
         let response = fetch(
             `https://hackdfw-checkup.herokuapp.com/patients/${pid}/messages`
         ).then((response) => response.json()).then((responseJson) => {
+            console.log(responseJson);
             responseJson.forEach(element => {
-                console.log(element)
                 messagesObj.push({
                     _id: Math.floor(Math.random() * 10000),
                     text: element.message,
                     createdAt: element.timestamp,
                     user: {
-                        _id: 3,
+                        _id: element.role === "nurse" ? 1 : 0,
                         name: element.sender_name,
                         avatar: 'https://placeimg.com/140/140/any',
                     },
