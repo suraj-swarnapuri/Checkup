@@ -1,16 +1,11 @@
+from doctest import UnexpectedException
 import sqlite3
 from os.path import exists
 
 database_file_name = "checkup.db"
-ROLES = {
-    'ADMIN': 'admin',
-    'PATIENT': 'patient',
-    'DOCTOR': 'doctor',
-    'NURSE': 'nurse'
-}
 
 def create_tables(curr):
-    curr.execute("CREATE TABLE users(uid, phone_number, name, role)")
+    curr.execute("CREATE TABLE users(uid PRIMARY KEY, phone_number, name, role)")
     curr.execute("CREATE TABLE patient_info(pid, phone_number, instructions, check_rate,name, rid)")
     curr.execute("CREATE TABLE patient_health(pid, temp, pulse, respiration, bp, timestamp)")
     curr.execute("CREATE TABLE activity_log(pid, nurse_id, timestamp, log)")
@@ -39,7 +34,7 @@ def clean(input):
     return input
 
 def clean_phone_number(phone_number):
-    input.replace('-', '')
+    phone_number.replace('-', '')
     return f"+1{phone_number}"
 
 
@@ -118,6 +113,40 @@ class Database:
 
     def add_user(self, uid, phone_number, name, role):
         self._con.cursor().execute(f"INSERT INTO users VALUES({uid}, \"{clean_phone_number(phone_number)}\", \"{clean(name)}\", \"{role}\")")
+        self._con.commit()
+
+    def get_user(self, uid):
+        req = self._con.cursor().execute(f"SELECT * FROM users WHERE uid={uid}")
+        users = req.fetchall()
+        if len(users) > 1 or len(users) < 1:
+            raise UnexpectedException("There should be one match..")
+        return {
+            'uid': users[0][0],
+            'phone_number': users[0][1],
+            'name': users[0][2],
+            'role': users[0][3],
+        }
+
+    def get_patient_by_phone(self, phone_number):
+        req = self._con.cursor().execute(f"SELECT * FROM users WHERE phone_number=\"{phone_number}\" and role=\"patient\"")
+        users = req.fetchall()
+        if len(users) < 1:
+            raise UnexpectedException("No match")
+        return {
+            'uid': users[0][0],
+            'phone_number': users[0][1],
+            'name': users[0][2],
+            'role': users[0][3],
+        }
 
     def get_patients(self):
-        req = self._con.cursor().execute(f"SELECT * FROM users WHERE role=\"{ROLES.PATIENT}\"")
+        req = self._con.cursor().execute(f"SELECT * FROM users WHERE role=\"patient\"")
+        patients = []
+        for i in req.fetchall():
+            patients.append({
+                'pid': i[0],
+                'phone_number': i[1],
+                'name': i[2],
+                'role': i[3]
+            })
+        return patients
