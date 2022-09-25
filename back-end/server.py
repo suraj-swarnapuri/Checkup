@@ -51,10 +51,11 @@ def mock_patient_health():
     bp_systolic = random.randint(100, 200)
     bp_diastolic = random.randint(60, 120)
     return {
-        'temp' : '{0}F'.format(temp),
-        'pulse' : '{0}bpm'.format(pulse),
-        'respiration' : '{0}breath/min'.format(respiration),
-        'bp' : '{0} mmHg systolic / {1} mmHg diastolic'.format(bp_systolic, bp_diastolic)
+        'temp' : temp,
+        'pulse' : pulse,
+        'respiration' : respiration,
+        'bp_systolic' : bp_systolic,
+        'bp_diastolic' : bp_diastolic
     }
 
 
