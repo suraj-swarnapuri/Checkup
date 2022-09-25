@@ -2,6 +2,24 @@ import { StyleSheet } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 
+
+function sendMessage(message) {
+    console.log(message, typeof message)
+    fetch('https://hackdfw-checkup.herokuapp.com/patients/509/messages', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "sender_name": "surag",
+            "role": "doctor",
+            "message": message
+        })
+    });
+}
+
+
 function ChatScreen({ route }) {
     const { messagesObj } = route.params;
     console.log(route.params)
@@ -13,7 +31,8 @@ function ChatScreen({ route }) {
     }, [])
 
     const onSend = useCallback((messages: any[] = []) => {
-        console.log(messages)
+        console.log(messages);
+        sendMessage(messages[0].text);
         setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
     }, [])
     return (

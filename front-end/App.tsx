@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import PatientListScreen from './screens/PatientListScreen';
 import ChatScreen from './screens/ChatScreen';
+import LoginScreen from './screens/LoginScreen';
 
 function Link(props: any) {
   return <Text {...props} accessibilityRole="link" style={StyleSheet.compose(styles.link, props.style)} />;
@@ -19,6 +20,11 @@ function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ title: 'Login' }}
+          />
           <Stack.Screen
             name="PatientList"
             component={PatientListScreen}

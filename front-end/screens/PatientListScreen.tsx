@@ -5,28 +5,30 @@ import { Button, HStack } from "@react-native-material/core";
 import { Icon } from 'react-native-elements'
 
 
-const PatientListScreen = ({ navigation }) => {
-    const patients = useSelector((state) => state.checkupStates.patients);
-    function getPatientData() {
+const PatientListScreen = ({ navigation, route }) => {
+    //const patients = useSelector((state) => state.checkupStates.patients);
+    const { patients } = route.params;
+    function getPatientData(pid) {
         let response = fetch(
-            'https://hackdfw-checkup.herokuapp.com/patient/1/health'
+            `https://hackdfw-checkup.herokuapp.com/patients/${pid}/health`
         ).then((response) => response.json()).then((responseJson) => {
             console.log(responseJson);
             navigation.navigate('PatientDetail', { name: 'test', patientData: responseJson })
         });
     }
-    function getChatData() {
+    function getChatData(pid) {
         let messagesObj = [];
         let response = fetch(
-            'https://hackdfw-checkup.herokuapp.com/patient/1/messages'
+            `https://hackdfw-checkup.herokuapp.com/patients/${pid}/messages`
         ).then((response) => response.json()).then((responseJson) => {
             responseJson.forEach(element => {
+                console.log(element)
                 messagesObj.push({
                     _id: Math.floor(Math.random() * 10000),
                     text: element.message,
                     createdAt: element.timestamp,
                     user: {
-                        _id: 2,
+                        _id: 3,
                         name: element.sender_name,
                         avatar: 'https://placeimg.com/140/140/any',
                     },
@@ -35,17 +37,18 @@ const PatientListScreen = ({ navigation }) => {
             navigation.navigate('Chat', { name: 'test', messagesObj: messagesObj })
         });
     }
+    console.log(patients)
     const patientsDisplay = patients.map((element) =>
         <View style={styles.listItem}>
             <HStack m={4} spacing={6}>
                 <Icon style={styles.icon} name={"person-outline"} size={35} type="ionicon" tvParallaxProperties={undefined} />
-                <Text style={styles.title}>{element.title}</Text>
+                <Text style={styles.title}>{element.name}</Text>
                 <Icon style={styles.icon} name={"chatbox-ellipses-outline"} size={35} type="ionicon" tvParallaxProperties={undefined} onPress={() =>
-                    getChatData()
+                    getChatData(element.pid)
                 } />
             </HStack>
-            <Text>{element.secondaryText}</Text>
-            <Button style={styles.button} variant="outlined" color="#000000" title="Status" onPress={() => getPatientData()} />
+            <Text>Dummy</Text>
+            <Button style={styles.button} variant="outlined" color="#000000" title="Status" onPress={() => getPatientData(element.pid)} />
         </View>
     );
 
