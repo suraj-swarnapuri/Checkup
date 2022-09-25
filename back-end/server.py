@@ -3,8 +3,8 @@ import database
 import random
 import datetime
 import json
-
 import chatbot
+from random import randint
 from flask import Flask, request, redirect
 from flask import g # application context
 from flask_cors import CORS
@@ -39,7 +39,7 @@ def get_timestamp():
 
 def Ok(obj = None):
     if obj == None:
-        obj = {'success':True}
+        obj = {'success':True} 
     return json.dumps(obj), 200, {'ContentType':'application/json'} 
 
 
@@ -60,7 +60,7 @@ def mock_patient_health():
 
 
 ##### Routes
-@app.route("/patient/<patient_id>/health")
+@app.route("/patients/<patient_id>/health")
 def get_info(patient_id):
     db = get_db()
     health_info =  mock_patient_health()
@@ -70,34 +70,64 @@ def get_info(patient_id):
     patient_info["activity_log"] = db.get_activity_log(patient_id)
     return patient_info
 
-@app.get("/patient/<patient_id>/messages")
+@app.get("/patients/<patient_id>/messages")
 def get_messages(patient_id):
     db = get_db()
     return list(db.get_messages(patient_id))
 
-@app.post("/patient/<patient_id>/messages")
+@app.post("/patients/<patient_id>/messages")
 def post_message(patient_id):
     db = get_db()
     json = request.get_json()
-    g.logger.info(str(json))
+    post_message
     db.add_message(patient_id, json['sender_name'], json['role'], get_timestamp(), json['message'])
+
+    user = db.get_user(patient_id)
+    chatbot = get_chatbot()
+    chatbot.sendMessage(user['phone_number'], json['message'])
     return Ok()
+
+@app.get("/patients")
+def get_patients():
+    db = get_db()
+    patients = db.get_patients()
+    if patients == None:
+        return Ok([])
+    return Ok(patients)
+
+@app.get("/patients/phone/<patient_id>")
+def get_patient_by_phone(phone_number):
+    db = get_db()
+    user = db.get_user_by_phone(phone_number)
+    return Ok(user)
+
+@app.post("/users")
+def add_user():
+    db = get_db()
+    json = request.get_json()
+    uid = randint(1, 1000)
+    db.add_user(uid, json['phone_number'], json['name'], json['role'])
+    return Ok({'uid': uid})
 
 
 ##### Twilio
 @app.route("/sms", methods=['GET', 'POST'])
 def sms_reply():
-    """Respond to incoming calls with a simple text message."""
-    # Start our TwiML response
-    resp = MessagingResponse()
+    logger = get_logger()
+    logger.info(str(request.values))
 
-    # Add a message
-    resp.message("The Robots are coming! Head for the hills!")
+    from_number = request.values.get('From')
+    body = request.values.get('Body')
 
-    bot = get_chatbot()
-    bot.sendMessage('+18178512523', 'hello.')
+    logger.info(f'from:{from_number}')
+    logger.info(f'body:{body}')
 
-    return str(resp)
+    # write message to db
+    db = get_db()
+    user = db.get_patient_by_phone(from_number)
+
+    logger.info(f'user:{str(user)}')
+    db.add_message(user['uid'], user['name'], user['role'], get_timestamp(), body)
 
 
 if __name__ == "__main__":
