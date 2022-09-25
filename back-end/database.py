@@ -8,7 +8,7 @@ def create_tables(curr):
     curr.execute("CREATE TABLE users(uid PRIMARY KEY, phone_number, name, role)")
     curr.execute("CREATE TABLE patient_info(pid, phone_number, instructions, check_rate,name, rid)")
     curr.execute("CREATE TABLE patient_health(pid, temp, pulse, respiration, bp, timestamp)")
-    curr.execute("CREATE TABLE activity_log(pid, nurse_id, timestamp, log)")
+    curr.execute("CREATE TABLE activity_log(pid, name, timestamp, message)")
     curr.execute("CREATE TABLE chat_log(pid, sender_name, role, timestamp, message_body)")
 
 def insert_dummy_data(con):
@@ -84,17 +84,6 @@ class Database:
             }
         return patient_info
 
-    def get_activity_log(self, patient_id):
-        req = self._con.cursor().execute("SELECT * FROM activity_log WHERE pid=?", (patient_id,))
-        activity_log = []
-        for i in req.fetchall():
-            activity_log.append({
-                'nurse_id' : i[1],
-                'activity' : i[2],
-                'log' : i[3]
-            })
-        return activity_log
-
     def get_messages(self, patient_id):
         req = self._con.cursor().execute(f"SELECT * FROM chat_log WHERE pid={patient_id} ORDER BY timestamp DESC")
         messages = []
@@ -150,3 +139,19 @@ class Database:
                 'role': i[3]
             })
         return patients
+
+    def add_activity_log(self, pid, name, timestamp, message):
+        self._con.cursor().execute(f"INSERT INTO activity_log VALUES({pid}, \"{clean(name)}\", \"{timestamp}\", \"{clean(message)}\")")
+        self._con.commit()
+
+    def get_activity_log(self, patient_id):
+        req = self._con.cursor().execute(f"SELECT * FROM activity_log WHERE pid={patient_id}")
+        activity_log = []
+        for i in req.fetchall():
+            activity_log.append({
+                'name' : i[1],
+                'timestamp' : i[2],
+                'message' : i[3]
+            })
+        return activity_log
+    
